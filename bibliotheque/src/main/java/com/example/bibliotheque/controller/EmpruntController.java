@@ -4,9 +4,11 @@ import com.example.bibliotheque.dto.EmpruntDTO;
 import com.example.bibliotheque.entities.Emprunt;
 import com.example.bibliotheque.service.EmpruntService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/emprunts")
@@ -27,8 +29,13 @@ public class EmpruntController {
     }
 
     @PostMapping
-    public Emprunt createEmprunt(@RequestBody EmpruntDTO empruntDTO) {
-        return empruntService.createEmprunt(empruntDTO);
+    public ResponseEntity<?> createEmprunt(@RequestBody EmpruntDTO empruntDTO) {
+        try {
+            Emprunt emprunt = empruntService.createEmprunt(empruntDTO);
+            return ResponseEntity.ok(emprunt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
@@ -47,7 +54,27 @@ public class EmpruntController {
     }
 
     @PutMapping("/{id}/retour")
-    public Emprunt retournerEmprunt(@PathVariable Long id) {
-        return empruntService.retournerEmprunt(id);
+    public ResponseEntity<?> retournerEmprunt(@PathVariable Long id) {
+        try {
+            Emprunt emprunt = empruntService.retournerEmprunt(id);
+            return ResponseEntity.ok(emprunt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{id}/retour/ligne/{ligneId}")
+    public ResponseEntity<?> retournerLigne(@PathVariable Long id, @PathVariable Long ligneId) {
+        try {
+            Emprunt emprunt = empruntService.retournerLigne(id, ligneId);
+            return ResponseEntity.ok(emprunt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/en-retard")
+    public List<Emprunt> getEmpruntsEnRetard() {
+        return empruntService.getEmpruntsEnRetard();
     }
 }

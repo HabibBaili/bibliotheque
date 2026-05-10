@@ -24,7 +24,7 @@ public class Livre {
 
     @OneToMany(mappedBy = "livre")
     @JsonIgnore  // ✅ EMPECHE LA BOUCLE JSON
-    private List<Emprunt> emprunts = new ArrayList<>();
+    private List<LigneEmprunt> ligneEmprunts = new ArrayList<>();
 
     public Livre() {}
 
@@ -46,8 +46,8 @@ public class Livre {
     public Bibliotheque getBibliotheque() { return bibliotheque; }
     public void setBibliotheque(Bibliotheque bibliotheque) { this.bibliotheque = bibliotheque; }
 
-    public List<Emprunt> getEmprunts() { return emprunts; }
-    public void setEmprunts(List<Emprunt> emprunts) { this.emprunts = emprunts; }
+    public List<LigneEmprunt> getLigneEmprunts() { return ligneEmprunts; }
+    public void setLigneEmprunts(List<LigneEmprunt> ligneEmprunts) { this.ligneEmprunts = ligneEmprunts; }
 
     public int getQuantite() { return quantite; }
     public void setQuantite(int quantite) { this.quantite = quantite; }
@@ -59,19 +59,17 @@ public class Livre {
         return "Livre: " + titre + " par " + auteur + " (ISBN: " + isbn + ") - Stock total: " + quantite + ", Disponible: " + quantiteDisponible;
     }
 
-    public boolean verifierDisponibilite() {
-        return this.quantiteDisponible > 0;
+    public boolean verifierDisponibilite(int qty) {
+        return this.quantiteDisponible >= qty;
     }
 
-    public void decrementerStock() {
-        if (this.quantiteDisponible > 0) {
-            this.quantiteDisponible--;
+    public void decrementerStock(int qty) {
+        if (this.quantiteDisponible >= qty) {
+            this.quantiteDisponible -= qty;
         }
     }
 
-    public void incrementerStock() {
-        if (this.quantiteDisponible < this.quantite) {
-            this.quantiteDisponible++;
-        }
+    public void incrementerStock(int qty) {
+        this.quantiteDisponible = Math.min(this.quantiteDisponible + qty, this.quantite);
     }
 }
