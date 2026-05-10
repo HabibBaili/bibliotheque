@@ -2,6 +2,7 @@ package com.example.bibliotheque.controller;
 
 import com.example.bibliotheque.entities.Adherent;
 import com.example.bibliotheque.service.AdherentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +27,18 @@ public class AdherentController {
     }
 
     @PostMapping
-    public Adherent createAdherent(@RequestBody Adherent adherent) {
+    public Adherent createAdherent(@Valid @RequestBody Adherent adherent) {
         return adherentService.saveAdherent(adherent);
     }
 
     @PutMapping("/{id}")
-    public Adherent updateAdherent(@PathVariable Long id, @RequestBody Adherent adherent) {
+    public Adherent updateAdherent(@PathVariable Long id, @Valid @RequestBody Adherent adherent) {
         return adherentService.updateAdherent(id, adherent);
+    }
+
+    @GetMapping("/search")
+    public List<Adherent> searchAdherents(@RequestParam String query) {
+        return adherentService.searchAdherents(query);
     }
 
     @DeleteMapping("/{id}")

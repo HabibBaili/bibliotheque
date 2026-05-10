@@ -2,6 +2,8 @@ package com.example.bibliotheque.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,11 @@ public class Adherent {
     private String prenom;
     private String adresse;
     private String tel;
+
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
+    @Column(unique = true, nullable = false)
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "bibliotheque_id")
@@ -40,6 +47,9 @@ public class Adherent {
 
     public String getTel() { return tel; }
     public void setTel(String tel) { this.tel = tel; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public Bibliotheque getBibliotheque() { return bibliotheque; }
     public void setBibliotheque(Bibliotheque bibliotheque) { this.bibliotheque = bibliotheque; }
