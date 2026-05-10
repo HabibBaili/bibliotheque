@@ -1,5 +1,6 @@
 package com.example.bibliotheque.service;
 
+import com.example.bibliotheque.entities.Categorie;
 import com.example.bibliotheque.entities.Livre;
 import com.example.bibliotheque.repository.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class LivreService {
 
     public List<Livre> getAllLivres() {
         return livreRepository.findAll();
+    }
+
+    public List<Livre> getLivresByCategorie(Categorie categorie) {
+        return livreRepository.findByCategorie(categorie);
     }
 
     public Livre getLivreById(Long id) {
@@ -39,6 +44,7 @@ public class LivreService {
             livre.setQuantiteDisponible(livre.getQuantiteDisponible() + diff);
 
             livre.setBibliotheque(livreDetails.getBibliotheque());
+            livre.setCategorie(livreDetails.getCategorie());
             return livreRepository.save(livre);
         }
         return null;

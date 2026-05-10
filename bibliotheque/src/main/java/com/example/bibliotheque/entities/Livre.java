@@ -22,6 +22,9 @@ public class Livre {
     @JoinColumn(name = "bibliotheque_id")
     private Bibliotheque bibliotheque;
 
+    @Enumerated(EnumType.STRING)
+    private Categorie categorie;
+
     @OneToMany(mappedBy = "livre")
     @JsonIgnore  // ✅ EMPECHE LA BOUCLE JSON
     private List<LigneEmprunt> ligneEmprunts = new ArrayList<>();
@@ -54,6 +57,9 @@ public class Livre {
 
     public int getQuantiteDisponible() { return quantiteDisponible; }
     public void setQuantiteDisponible(int quantiteDisponible) { this.quantiteDisponible = quantiteDisponible; }
+
+    public Categorie getCategorie() { return categorie; }
+    public void setCategorie(Categorie categorie) { this.categorie = categorie; }
 
     public String afficherDetails() {
         return "Livre: " + titre + " par " + auteur + " (ISBN: " + isbn + ") - Stock total: " + quantite + ", Disponible: " + quantiteDisponible;

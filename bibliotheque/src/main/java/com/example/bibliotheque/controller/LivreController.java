@@ -1,5 +1,6 @@
 package com.example.bibliotheque.controller;
 
+import com.example.bibliotheque.entities.Categorie;
 import com.example.bibliotheque.entities.Livre;
 import com.example.bibliotheque.service.LivreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,16 @@ public class LivreController {
     private LivreService livreService;
 
     @GetMapping
-    public List<Livre> getAllLivres() {
+    public List<Livre> getAllLivres(@RequestParam(required = false) Categorie categorie) {
+        if (categorie != null) {
+            return livreService.getLivresByCategorie(categorie);
+        }
         return livreService.getAllLivres();
+    }
+
+    @GetMapping("/categories")
+    public Categorie[] getCategories() {
+        return Categorie.values();
     }
 
     @GetMapping("/{id}")
